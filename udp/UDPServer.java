@@ -24,8 +24,24 @@ public class UDPServer {
 		byte[]			pacData;
 		DatagramPacket 	pac;
 
+		close = false;
+		pacSize = 5000;
+		pacData = new byte[5000];
+
 		// TO-DO: Receive the messages and process them by calling processMessage(...).
 		//        Use a timeout (e.g. 30 secs) to ensure the program doesn't block forever
+		do{
+			try{
+				pac = new DatagramPacket(pacData,pacSize);
+				recvSoc.setSoTimeout(30000);
+				recvSoc.receive(pac);
+				String pacdata = new String(pac.getData()).trim();
+				processMessage(pacdata);
+			} catch(IOException){
+				close = true;
+				System.out.println("Error due to timeout.");
+			}
+		}while(!close && (totalMessages != receivedMessages.size()-1));
 
 	}
 
@@ -34,9 +50,14 @@ public class UDPServer {
 		MessageInfo msg = null;
 
 		// TO-DO: Use the data to construct a new MessageInfo object
-
+		try{
+			msg = new MessageInfo(data);
+		}catch(Exception e){
+			System.out.println("Cannot construct a new MessageInfo object");
+			System.exit(-1);
+		}
 		// TO-DO: On receipt of first message, initialise the receive buffer
-
+		
 		// TO-DO: Log receipt of the message
 
 		// TO-DO: If this is the last expected message, then identify
