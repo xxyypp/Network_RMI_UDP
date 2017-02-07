@@ -3,6 +3,7 @@
  */
 package udp;
 
+import java.io.*;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -25,8 +26,8 @@ public class UDPServer {
 		DatagramPacket 	pac;
 
 		close = false;
-		pacSize = 5000;
-		pacData = new byte[5000];
+		pacSize = 50;
+		pacData = new byte[50];
 
 		// TO-DO: Receive the messages and process them by calling processMessage(...).
 		//        Use a timeout (e.g. 30 secs) to ensure the program doesn't block forever
@@ -37,11 +38,11 @@ public class UDPServer {
 				recvSoc.receive(pac);
 				String pacdata = new String(pac.getData()).trim();
 				processMessage(pacdata);
-			} catch(IOException){
+			} catch(IOException e){
 				close = true;
 				System.out.println("Error due to timeout.");
 			}
-		}while(!close && (totalMessages != receivedMessages.size()-1));
+		}while(!close /*&& (totalMessages != receivedMessages.size()-1)*/);
 
 	}
 
@@ -50,25 +51,67 @@ public class UDPServer {
 		MessageInfo msg = null;
 
 		// TO-DO: Use the data to construct a new MessageInfo object
+		/* ByteArrayInputStream byteStream = new ByteArrayInputStream(data);
+		ObjectInputStream oi;
+
+		try{
+			oi = new ObjectInputStream(new BufferedInputStream(byteStream));
+			msg = (MessageInfo) oi.readObject();
+			oi.close();
+		}catch(ClassNotFoundException e){
+			System.out.println("Error: Could not find class match for transmitted message.");
+		}catch (IOException e) {
+			System.out.println("Error: IO exception creating ObjectInputStream.");
+		}*/
 		try{
 			msg = new MessageInfo(data);
 		}catch(Exception e){
 			System.out.println("Cannot construct a new MessageInfo object");
+			e.printStackTrace();
 			System.exit(-1);
 		}
 		// TO-DO: On receipt of first message, initialise the receive buffer
-		
+		if (receivedMessages == null){
+			totalMessages = msg.totalMessages;
+			receivedMessages = new int[totalMessages];
+		}
 		// TO-DO: Log receipt of the message
-
+		receivedMessages[msg.messageNum] = 1;
 		// TO-DO: If this is the last expected message, then identify
 		//        any missing messages
+		int counter = 0;
+		if(msg.messageNum + 1 == msg.totalMessages){
+			String tmp = "Packet lost: ";
+			for(int i =0; i < totalMessages; i++){
+				if(receivedMessages[i] != 1){
+					tmp = tmp + " " + (i+1) + ", ";
+					counter ++;
+				}
+			}
+			if(counter == 0){
+				tmp = tmp + " No packet lost! ";
+			}
 
+			System.out.println("Show result:");
+			System.out.println("Total: " + msg.totalMessages + " -> " + (msg.totalMessages-counter) + " Received! ");
+			System.out.println("Total: " + msg.totalMessages + "->" + counter + " Failed... ");
+			System.out.println(tmp);
+			System.out.println("Send done!");
+			close = true;
+		}
 	}
 
 
 	public UDPServer(int rp) {
 		// TO-DO: Initialise UDP socket for receiving data
-
+		try {
+		 recvSoc = new DatagramSocket(rp);
+	 } catch (SocketException e) {
+		 System.out.println("Couldn't initialise recvSoc");
+		 e.printStackTrace();
+		 System.exit(-1);
+	 }
+	 //close = false;
 		// Done Initialisation
 		System.out.println("UDPServer ready");
 	}
@@ -84,6 +127,15 @@ public class UDPServer {
 		recvPort = Integer.parseInt(args[0]);
 
 		// TO-DO: Construct Server object and start it by calling run().
+		UDPServer udpsrv = new UDPServer(recvPort);
+		udpsrv.run();
+		/*try{
+			udpsrv.run();
+		}catch(SocketTimeoutException e){
+			System.out.println("Timeout, please check!");
+			e.printStackTrace();
+			System.exit(-1);
+		}*/
 	}
 
 }

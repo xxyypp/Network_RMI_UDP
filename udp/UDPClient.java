@@ -40,7 +40,7 @@ public class UDPClient {
 		// TO-DO: Construct UDP client class and try to send messages
 		System.out.println("Building UDP client");
 		UDPClient client = new UDPClient();
-		System.out.println("sending");
+		System.out.println("Sending messages...");
 		client.testLoop(serverAddr,recvPort,countTo);
 	}
 
@@ -60,11 +60,11 @@ public class UDPClient {
 		MessageInfo msg;
 		// TO-DO: Send the messages to the server
 		for(int i = 0; i < countTo; i++){
-			msg = new MessageInfo(countTo);
+			msg = new MessageInfo(countTo,i);
 			this.send(msg.toString(),serverAddr,recvPort);
 			tries++;
 		}
-		System.out.println(countTo+"Msg sent"+"Try"+tries+"Times");
+		System.out.println(countTo+" Msg sent "+" Try "+tries+" Times ");
 
 	}
 
