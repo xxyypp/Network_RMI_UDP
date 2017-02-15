@@ -1,6 +1,6 @@
 /*
- * Created on 01-Mar-2016
- */
+* Created on 01-Mar-2016
+*/
 package udp;
 
 import java.io.*;
@@ -42,7 +42,7 @@ public class UDPServer {
 				close = true;
 				System.out.println("Error due to timeout.");
 			}
-		}while(!close /*&& (totalMessages != receivedMessages.size()-1)*/);
+		}while(!close);
 
 	}
 
@@ -51,18 +51,6 @@ public class UDPServer {
 		MessageInfo msg = null;
 
 		// TO-DO: Use the data to construct a new MessageInfo object
-		/* ByteArrayInputStream byteStream = new ByteArrayInputStream(data);
-		ObjectInputStream oi;
-
-		try{
-			oi = new ObjectInputStream(new BufferedInputStream(byteStream));
-			msg = (MessageInfo) oi.readObject();
-			oi.close();
-		}catch(ClassNotFoundException e){
-			System.out.println("Error: Could not find class match for transmitted message.");
-		}catch (IOException e) {
-			System.out.println("Error: IO exception creating ObjectInputStream.");
-		}*/
 		try{
 			msg = new MessageInfo(data);
 		}catch(Exception e){
@@ -105,13 +93,12 @@ public class UDPServer {
 	public UDPServer(int rp) {
 		// TO-DO: Initialise UDP socket for receiving data
 		try {
-		 recvSoc = new DatagramSocket(rp);
-	 } catch (SocketException e) {
-		 System.out.println("Couldn't initialise recvSoc");
-		 e.printStackTrace();
-		 System.exit(-1);
-	 }
-	 //close = false;
+			recvSoc = new DatagramSocket(rp);
+		} catch (SocketException e) {
+			System.out.println("Couldn't initialise recvSoc");
+			e.printStackTrace();
+			System.exit(-1);
+		}
 		// Done Initialisation
 		System.out.println("UDPServer ready");
 	}
@@ -129,13 +116,6 @@ public class UDPServer {
 		// TO-DO: Construct Server object and start it by calling run().
 		UDPServer udpsrv = new UDPServer(recvPort);
 		udpsrv.run();
-		/*try{
-			udpsrv.run();
-		}catch(SocketTimeoutException e){
-			System.out.println("Timeout, please check!");
-			e.printStackTrace();
-			System.exit(-1);
-		}*/
-	}
+}
 
 }

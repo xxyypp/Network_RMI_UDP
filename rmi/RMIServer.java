@@ -1,6 +1,6 @@
 /*
- * Created on 01-Mar-2016
- */
+* Created on 01-Mar-2016
+*/
 package rmi;
 
 import java.net.MalformedURLException;
@@ -22,15 +22,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 	private int[] receivedMessages;
 
 	public RMIServer() throws RemoteException {
-		/*
-		super(a,b,c,d,e)
-		a -> indicate remoteObject port
-		b -> ?
-		c -> ?
-		d -> encrypt algorithm
-		e -> two way confirmation between client and server
-		*/
-		super(); /**********used or not?**********/
+		super();
 	}
 	//remote method to return msg, also throw RemoteException
 	public void receiveMessage(MessageInfo msg) throws RemoteException {
@@ -43,9 +35,9 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 		// TO-DO: Log receipt of the message
 		receivedMessages[msg.messageNum] = 1;
 		// TO-DO: If this is the last expected message, then identify
-		//        any missing messages
+		// any missing messages
 		if(msg.messageNum + 1 == totalMessages){
-			System.out.println("Message sum");
+			System.out.println("Message summary: ");
 			String tmp = "Package lost: ";
 			int count = 0;
 			for(int i = 0; i < totalMessages; i++){
@@ -63,7 +55,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 			System.out.println(tmp);
 			System.out.println("Test finished.");
 			totalMessages = -1;
-			//System.exit(0);
 		}
 	}
 
@@ -80,9 +71,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 		// TO-DO: Instantiate the server class
 		// TO-DO: Bind to RMI registry
 		try{
-			//LocateRegistry.createRegistry(8080);
 			RMIServer server = new RMIServer();
-			//Naming.rebind("RMIServer", new RMIServer());
 			rebindServer("RMIServerI", server);
 			System.out.println("Server done!");
 		}catch(Exception Exce){
@@ -113,8 +102,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 			System.out.println("Server can't bind regisrty");
 			RmEx.printStackTrace();
 			System.exit(-1);
-		}/*catch(MalformedURLException e){
-			System.out.println("Error: Malformed URL Exception.");
-		}*/
+		}
 	}
 }

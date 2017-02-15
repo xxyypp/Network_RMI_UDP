@@ -64,7 +64,7 @@ public class UDPClient {
 			this.send(msg.toString(),serverAddr,recvPort);
 			tries++;
 		}
-		System.out.println(countTo+" Msg sent "+" Try "+tries+" Times ");
+		System.out.println(countTo+" Msg sent"+"\nTry "+tries+" Times ");
 
 	}
 

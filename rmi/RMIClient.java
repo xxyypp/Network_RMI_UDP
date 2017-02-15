@@ -1,6 +1,6 @@
 /*
- * Created on 01-Mar-2016
- */
+* Created on 01-Mar-2016
+*/
 package rmi;
 
 import java.rmi.Naming;
@@ -33,12 +33,11 @@ public class RMIClient {
 
 		// TO-DO: Initialise Security Manager
 		if (System.getSecurityManager() == null) {
-	    	System.setSecurityManager(new SecurityManager());
+			System.setSecurityManager(new SecurityManager());
 		}
 		// TO-DO: Bind to RMIServer
-			// TO-DO: Attempt to send messages the specified number of times
+		// TO-DO: Attempt to send messages the specified number of times
 		try{
-		//	iRMIServer = (RMIServerI)Naming.lookup(urlServer);
 			Registry registry = LocateRegistry.getRegistry(args[0],8080);
 			RMIServerI server = (RMIServerI) registry.lookup("RMIServerI");
 
@@ -50,21 +49,17 @@ public class RMIClient {
 			System.exit(0);
 		}catch(RemoteException e){
 			System.out.println("Error: Remote Exception.");
-		  e.printStackTrace();
-			//System.exit(-1);
+			e.printStackTrace();
+			System.exit(-1);
 		}catch(NotBoundException e){
 			System.out.println("Error: Not Bound Exception.");
-			  e.printStackTrace();
-				//System.exit(-1);
-		}/*catch(MalformedURLException e){
-			System.out.println("Error: Malformed URL Exception.");
-		}*/
-		catch (Exception e){
-			System.err.println("Exception - Client");
-      e.printStackTrace();
+			e.printStackTrace();
 			System.exit(-1);
 		}
-
-
+		catch (Exception e){
+			System.err.println("Exception in the Client, please check");
+			e.printStackTrace();
+			System.exit(-1);
+		}
 	}
 }
