@@ -53,7 +53,7 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 			System.out.println("Messages received: " + (totalMessages - count));
 			System.out.println("Messages lost: " + count);
 			System.out.println(tmp);
-			System.out.println("Test finished.");
+			System.out.println("\n");
 			totalMessages = -1;
 		}
 	}
@@ -79,10 +79,6 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 			Exce.printStackTrace();
 			System.exit(-1);
 		}
-
-
-
-
 	}
 
 	protected static void rebindServer(String serverURL, RMIServer server) {
@@ -91,8 +87,8 @@ public class RMIServer extends UnicastRemoteObject implements RMIServerI {
 		// Start / find the registry (hint use LocateRegistry.createRegistry(...)
 		// If we *know* the registry is running we could skip this (eg run rmiregistry in the start script)
 		try{
-			Registry registry = LocateRegistry.createRegistry(8080);
-			registry.rebind(serverURL,server);
+			Registry r = LocateRegistry.createRegistry(8080);
+			r.rebind(serverURL,server);
 		}
 		// TO-DO:
 		// Now rebind the server to the registry (rebind replaces any existing servers bound to the serverURL)

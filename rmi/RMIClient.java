@@ -6,8 +6,6 @@ package rmi;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.net.MalformedURLException;
-//added later
 import java.rmi.RMISecurityManager;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -38,12 +36,12 @@ public class RMIClient {
 		// TO-DO: Bind to RMIServer
 		// TO-DO: Attempt to send messages the specified number of times
 		try{
-			Registry registry = LocateRegistry.getRegistry(args[0],8080);
-			RMIServerI server = (RMIServerI) registry.lookup("RMIServerI");
+			Registry r = LocateRegistry.getRegistry(args[0],8080);
+			RMIServerI s = (RMIServerI) r.lookup("RMIServerI");
 
 			for(int i = 0; i < numMessages; i++){
 				MessageInfo msg = new MessageInfo(numMessages, i);
-				server.receiveMessage(msg);
+				s.receiveMessage(msg);
 			}
 			System.out.println("Msg sent:" + numMessages);
 			System.exit(0);
